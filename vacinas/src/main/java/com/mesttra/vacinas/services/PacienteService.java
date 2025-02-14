@@ -4,58 +4,65 @@ import com.mesttra.vacinas.models.Paciente;
 
 public class PacienteService {
     
-    public Paciente createPaciente(PacienteDto paciente){
+    public static Paciente createPaciente(Request req){
         var newPaciente = new Paciente(
-            paciente.getName(),
-            paciente.getCpf(),
-            paciente.getSexo(),
-            paciente.getNascimento()
+            req.queryParams("nome"),
+            req.queryParams("cpf"),
+            req.queryParams("sexo"),
+            req.queryParams("nascimento")
         );
 
         // Logica pra inserir no banco de dados
 
         return newPaciente;
     }
-
-    public List<Paciente> readPaciente(){
-        List<Paciente> pacientes;
-        //pacientes = Logica para pegar todos os pacientes;
-
+    public static List<Paciente> readPaciente(Request req) {
+        List<Paciente> pacientes = new ArrayList<>();
+        // pacientes = Lógica para pegar todos os pacientes
+    
         return pacientes;
     }
-
-    public Paciente readPacienteById(Integer id){
-        Paciente paciente;
-        //paciente = Logica para pegar um paciente via id;
-
+    
+    public static Paciente readPacienteById(Request req) {
+        Integer id = Integer.parseInt(req.queryParams("id"));
+        Paciente paciente = null;
+        // paciente = Lógica para pegar o paciente via id
+    
         return paciente;
     }
-
-    public Paciente updatePaciente(Integer id, PacienteDto paciente){
-        Paciente pacienteDb;
-        //pacienteDb = Logica para pegar um paciente via id;
-
-        pacienteDb.setName(paciente.getName());
-        pacienteDb.setCpf(paciente.getCpf());
-        pacienteDb.setSexo(paciente.getSexo());
-        pacienteDb.setData(paciente.getData());
-
-        // Logica para salvar o paciente no db;
-
+    
+    public static Paciente updatePaciente(Request req) {
+        Paciente pacienteDb = null;
+        Integer id = Integer.parseInt(req.params(":id"));
+        // pacienteDb = Lógica para pegar o paciente via id
+    
+        String nome = req.queryParams("nome");
+        String cpf = req.queryParams("cpf");
+        String sexo = req.queryParams("sexo");
+        String nascimento = req.queryParams("nascimento");
+    
+        pacienteDb.setName(nome);
+        pacienteDb.setCpf(cpf);
+        pacienteDb.setSexo(sexo);
+        pacienteDb.setData(nascimento);
+    
+        // Lógica para salvar o paciente no db
+    
         return pacienteDb;
-
     }
-
-    public boolean deletePaciente(Integer id){
-        Paciente paciente;
-        //paciente = Logica para pegar um paciente via id;
-
-        if(paciente == null){
+    
+    public static boolean deletePaciente(Request req) {
+        Paciente paciente = null;
+        Integer id = Integer.parseInt(req.params(":id"));
+        // Lógica paciente = para pegar o paciente via id
+    
+        if (paciente == null) {
             return false;
         }
-
-        // Logica para deletar paciente
-
+    
+        // Lógica para deletar o paciente
+    
         return true;
     }
+    
 }
