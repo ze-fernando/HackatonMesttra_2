@@ -6,14 +6,21 @@ public class Vacina {
     private String vacina;
     private String descricao;
     private int limite_aplicacao;
-    private Publico_alvo = publico_alvo;
+    private Publico_alvo  publico_alvo;
+    
+    public enum Publico_alvo {
+    	CRIANÇA, 
+    	ADOLESCENTE, 
+    	ADULTO, 
+    	GESTANTE
+    }
 
     public Vacina(int id, String vacina, String descricao, int limite_aplicacao, Publico_alvo publico_alvo){
         this.id = id;
         this.vacina = vacina;
         this.descricao = descricao;
         this.limite_aplicacao = limite_aplicacao;
-        this.publico_alvo = publico_alvo
+        this.publico_alvo = publico_alvo;
     }
 
     public int getId() {
@@ -48,11 +55,11 @@ public class Vacina {
         this.limite_aplicacao = limite_aplicacao;
     }
 
-    public getPublico_alvo(){
+    public Publico_alvo getPublico_alvo(){
         return publico_alvo;
     }
 
-    public void setPublico_alvo(){
+    public void setPublico_alvo(Publico_alvo publico_alvo){
         this.publico_alvo = publico_alvo;
     }
 }

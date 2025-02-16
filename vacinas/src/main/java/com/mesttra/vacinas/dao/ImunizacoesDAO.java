@@ -49,12 +49,12 @@ public class ImunizacoesDAO {
     	try (Connection conexao = ConexaoBanco.getConnection();
 			 PreparedStatement comando = conexao.prepareStatement(sql)){
     		
-    		comando.setDate(1, new java.sql.Date(imunizacao.getDataAplicacao().getTime()));
+    		comando.setDate(1, new java.sql.Date(imunizacao.getData_aplicacao().getTime()));
             comando.setString(2, imunizacao.getFabricante());
             comando.setString(3, imunizacao.getLote());         
-            comando.setString(4, imunizacao.getLocalAplicacao()); 
-            comando.setString(5, imunizacao.getProfissionalAplicador()); 
-            comando.setString(6, imunizacao.getLocalAplicacao()); 
+            comando.setString(4, imunizacao.getLocal_aplicacao()); 
+            comando.setString(5, imunizacao.getProfissional_aplicador()); 
+            comando.setString(6, imunizacao.getLocal_aplicacao()); 
             comando.setInt(7, imunizacao.getId()); 
             
             comando.executeUpdate();
