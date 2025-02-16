@@ -1,18 +1,18 @@
 package com.mesttra.vacinas.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Imunizacoes {
     private int id;
     private int id_paciente;
     private int id_dose;
-    private LocalDate data_aplicacao;
+    private Date data_aplicacao;
     private String fabricante;
     private String lote;
     private String local_aplicacao;
     private String profissional_aplicador;
 
-    public Imunizacoes(int id, int id_paciente, int id_dose, LocalDate data_aplicacao, String fabricante, String lote, String local_aplicacao, String profissional_aplicador) {
+    public Imunizacoes(int id, int id_paciente, int id_dose, Date data_aplicacao, String fabricante, String lote, String local_aplicacao, String profissional_aplicador) {
         this.id = id;
         this.id_paciente = id_paciente;
         this.id_dose = id_dose;
@@ -50,7 +50,7 @@ public class Imunizacoes {
     }
     // -----
 
-    public LocalDate getData_aplicacao() {
+    public Date getData_aplicacao() {
         return data_aplicacao;
     }
 

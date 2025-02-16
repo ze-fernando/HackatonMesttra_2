@@ -86,7 +86,7 @@ public class PacienteDAO {
     }
 	
 	public static Paciente consultarPacientePorId(int id) throws SQLException {
-    	String sql = "SELECT * FROM Pacientes WHERE Id = ?";
+    	String sql = "SELECT * FROM pacientes WHERE Id = ?";
     	
     	Paciente paciente = null;
     	

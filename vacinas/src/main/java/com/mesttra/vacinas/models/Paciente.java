@@ -1,23 +1,26 @@
 package com.mesttra.vacinas.models;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Paciente {
     private int id;
     private String nome;
     private String cpf;
     private Sexo sexo;
-    private LocalDate dataNascimento;
+    private Date dataNascimento;
+    
+    public enum Sexo {
+    	M, F  	
+    }
 
     
-    public Paciente(int id, String nome, String cpf, Sexo sexo, LocalDate dataNascimento) {
+    public Paciente(int id, String nome, String cpf, Sexo sexo, Date dataNascimento) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.sexo = sexo;
         this.dataNascimento = dataNascimento;
     }
-
     
     public int getId() {
         return id;
@@ -51,11 +54,11 @@ public class Paciente {
         this.sexo = sexo;
     }
 
-    public LocalDate getDataNascimento() {
+    public Date getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
+    public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 }
