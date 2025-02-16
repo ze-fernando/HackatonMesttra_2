@@ -2,5 +2,57 @@ package com.mesttra.vacinas.models;
 
 public class Vacina {
 
-    
+    private int id;
+    private String vacina;
+    private String descricao;
+    private int limite_aplicacao;
+    private Publico_alvo = publico_alvo;
+
+    public Vacina(int id, String vacina, String descricao, int limite_aplicacao, Publico_alvo publico_alvo){
+        this.id = id;
+        this.vacina = vacina;
+        this.descricao = descricao;
+        this.limite_aplicacao = limite_aplicacao;
+        this.publico_alvo = publico_alvo
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getVacina() {
+        return vacina;
+    }
+
+    public void setVacina(String vacina) {
+        this.vacina = vacina;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public int getLimite_aplicacao() {
+        return limite_aplicacao;
+    }
+
+    public void setLimite_aplicacao(int limite_aplicacao) {
+        this.limite_aplicacao = limite_aplicacao;
+    }
+
+    public getPublico_alvo(){
+        return publico_alvo;
+    }
+
+    public void setPublico_alvo(){
+        this.publico_alvo = publico_alvo;
+    }
 }
