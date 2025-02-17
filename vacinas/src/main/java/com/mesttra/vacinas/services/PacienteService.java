@@ -1,48 +1,115 @@
 package com.mesttra.vacinas.services;
 
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+
 import com.mesttra.vacinas.models.Paciente;
 import com.mesttra.vacinas.dao.PacienteDAO;
 
 public class PacienteService {
     
-    public static Paciente createPaciente(Request req){
-        var newPaciente = new Paciente(
-            req.queryParams("nome"),
-            req.queryParams("cpf"),
-            req.queryParams("sexo"),
-            req.queryParams("nascimento")
-        );
+    public static Route createPaciente(){
+        return new Route() {
+            @Override
+            public Object handle(Request req, Response res){       
+                    var newPaciente = new Paciente(
+                    req.queryParams("nome"),
+                    req.queryParams("cpf"),
+                    req.queryParams("sexo"),
+                    req.queryParams("nascimento")
+                );
+                try {
+                    
+                    PacienteDAO.adicionarPaciente(newPaciente);
+                    res.status(201);
 
-        PacienteDAO.adicionarPaciente(newPaciente);
+                    return "{\"message\": \"Paciente " + newPaciente + " com sucesso.\"}" ;
+                } catch (Exception e) {
+                    res.status(500);
+                    return "{\"error\": \"" + e.getMessage() + "\"}" ;
+                };
+            };
+        };
+    }
 
-        return newPaciente;
-    }
-    public static List<Paciente> readPaciente(Request req) {
-        List<Paciente> pacientes =  PacienteDAO.consultarTodosPacientes();
+    public static Route readPaciente() {
+        return new Route() {
+            @Override
+            public Object handle(Request req, Response res) {
+                try {
+                    List<Paciente> pacientes = PacienteDAO.consultarTodosPacientes();
+                    res.status(200);
     
-        return pacientes;
-    }
-    
-    public static Paciente readPacienteById(Request req) {
-        int id = int.parseInt(req.queryParams("id"));
-        Paciente paciente = PacienteDAO.consultarPacientePorId(id);
-           
-        return paciente;
-    }
-    
-    public static Paciente updatePaciente(Request req) {
-        int id = int.parseInt(req.params(":id"));
-        Paciente pacienteDb = PacienteDAO.consultarPacientePorId(id);
-        
-        PacienteDAO.alterarPaciente(pacienteDb);
-    
-        return pacienteDb;
+                    return "{\"message\": \"Pacientes " + pacientes + " encontrados com sucesso.\"}";
+                } catch (Exception e) {
+                    res.status(500);
+                    return "{\"error\": \"" + e.getMessage() + "\"}";
+                }
+            }
+        };
     }
     
-    public static void deletePaciente(Request req) {
-        int id = int.parseInt(req.params(":id"));
-        
-        PacienteDAO.excluirPaciente(id);
+    public static Route readPacienteById() {
+        return new Route() {
+            @Override
+            public Object handle(Request req, Response res) {
+                try {
+                    int id = Integer.parseInt(req.queryParams("id"));
+                    Paciente paciente = PacienteDAO.consultarPacientePorId(id);
+                    res.status(200);
+    
+                    return paciente;
+                } catch (Exception e) {
+                    res.status(500);
+                    return "{\"error\": \"" + e.getMessage() + "\"}";
+                }
+            }
+        };
     }
     
+    public static Route updatePaciente() {
+        return new Route() {
+            @Override
+            public Object handle(Request req, Response res) {
+                int id = Integer.parseInt(req.params(":id"));
+                try {
+                    Paciente pacienteDb = PacienteDAO.consultarPacientePorId(id);
+
+                    if(pacienteDb == null){
+                        res.status(404);
+                        return "{\"message\": \"Paciente não encontrado.\"}";
+                    }
+    
+                    PacienteDAO.alterarPaciente(pacienteDb);
+                    res.status(200);
+    
+                    return "{\"message\": \"Paciente atualizado com sucesso.\"}";
+                } catch (Exception e) {
+                    res.status(500);
+                    return "{\"error\": \"" + e.getMessage() + "\"}";
+                }
+            }
+        };
+    }
+    
+    public static Route deletePaciente() {
+        return new Route() {
+            @Override
+            public Object handle(Request req, Response res) {
+                int id = Integer.parseInt(req.params(":id"));
+                try {
+    
+                    PacienteDAO.excluirPaciente(id);
+                    res.status(200);
+    
+                    return "{\"message\": \"Paciente excluído com sucesso.\"}";
+                } catch (Exception e) {
+                    res.status(500);
+                    return "{\"error\": \"" + e.getMessage() + "\"}";
+                }
+            }
+        };
+    };
 }
