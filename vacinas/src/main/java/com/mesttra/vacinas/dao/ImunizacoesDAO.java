@@ -9,10 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mesttra.vacinas.config.ConexaoBanco;	
+import com.mesttra.vacinas.config.ConexaoBanco;
+import com.mesttra.vacinas.dto.DTOImunizacaoDosePaciente;
 import com.mesttra.vacinas.models.Imunizacoes;
-import com.mesttra.vacinas.models.Paciente;
-import com.mesttra.vacinas.models.Paciente.Sexo;
 
 public class ImunizacoesDAO {
 	public static void adicionarImunizacao(Imunizacoes imunizacao) throws SQLException{
@@ -21,13 +20,13 @@ public class ImunizacoesDAO {
         
         try (Connection conexao = ConexaoBanco.getConnection();
              PreparedStatement comando = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-        	comando.setInt(1, imunizacao.getIdPaciente());  
-            comando.setInt(2, imunizacao.getIdDose());     
-            comando.setDate(3, new java.sql.Date(imunizacao.getDataAplicacao().getTime()));
+        	comando.setInt(1, imunizacao.getId_paciente());  
+            comando.setInt(2, imunizacao.getId_dose());     
+            comando.setDate(3, new java.sql.Date(imunizacao.getData_aplicacao().getTime()));
             comando.setString(4, imunizacao.getFabricante());
             comando.setString(5, imunizacao.getLote()); 
-            comando.setString(6, imunizacao.getLocalAplicacao());
-            comando.setString(7, imunizacao.getProfissionalAplicador());
+            comando.setString(6, imunizacao.getLocal_aplicacao());
+            comando.setString(7, imunizacao.getProfissional_aplicador());
             
             comando.executeUpdate();
             
@@ -85,8 +84,8 @@ public class ImunizacoesDAO {
 		}
     }
 	
-	public static List<Imunizacoes> consultarTodasImunizacoes() throws SQLException{
-    	List<Imunizacoes> lista = new ArrayList<>();
+	public static List<DTOImunizacaoDosePaciente> consultarTodasImunizacoes() throws SQLException{
+    	List<DTOImunizacaoDosePaciente> lista = new ArrayList<>();
     	
     	String sql = "SELECT "
     			+ "i.id, "
@@ -99,9 +98,9 @@ public class ImunizacoesDAO {
                 + "i.local_aplicacao, "
                 + "i.profissional_aplicador "
                 + "FROM imunizacoes i "
-                + "JOIN pacientes p ON i.id_paciente = p.id "
-                + "JOIN doses d ON i.id_dose = d.id "
-                + "JOIN vacinas v ON d.id_vacina = v.id";
+                + "JOIN paciente p ON i.id_paciente = p.id "
+                + "JOIN dose d ON i.id_dose = d.id "
+                + "JOIN vacina v ON d.id_vacina = v.id";
     	
     	try (Connection conexao = ConexaoBanco.getConnection();
     		 Statement comando = conexao.createStatement();
@@ -109,7 +108,7 @@ public class ImunizacoesDAO {
     		
     		while (resultado.next()) {
     			
-    			lista.add(new Imunizacoes(	
+    			lista.add(new DTOImunizacaoDosePaciente(	
 					resultado.getInt("id"),
 					resultado.getString("nome"),
 					resultado.getString("vacina"),
@@ -125,8 +124,8 @@ public class ImunizacoesDAO {
     	return lista;
     }
 	
-	public static Imunizacoes consultarImunizacaoPorIdImunizacao(int idImunizacao) throws SQLException {
-	    Imunizacoes imunizacao = null;
+	public static DTOImunizacaoDosePaciente consultarImunizacaoPorIdImunizacao(int idImunizacao) throws SQLException {
+	    DTOImunizacaoDosePaciente imunizacao = null;
 	    
 	    String sql = "SELECT "
 	            + "i.id, "
@@ -139,9 +138,9 @@ public class ImunizacoesDAO {
 	            + "i.local_aplicacao, "
 	            + "i.profissional_aplicador "
 	            + "FROM imunizacoes i "
-	            + "JOIN pacientes p ON i.id_paciente = p.id "
-	            + "JOIN doses d ON i.id_dose = d.id "
-	            + "JOIN vacinas v ON d.id_vacina = v.id "
+	            + "JOIN paciente p ON i.id_paciente = p.id "
+	            + "JOIN dose d ON i.id_dose = d.id "
+	            + "JOIN vacina v ON d.id_vacina = v.id "
 	            + "WHERE i.id = ?";
 	    
 	    try (Connection conexao = ConexaoBanco.getConnection();
@@ -151,7 +150,7 @@ public class ImunizacoesDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	                imunizacao = new Imunizacoes(
+	                imunizacao = new DTOImunizacaoDosePaciente(
 	                        resultado.getInt("id"),
 	                        resultado.getString("nome"),
 	                        resultado.getString("vacina"),
@@ -168,11 +167,11 @@ public class ImunizacoesDAO {
 	    return imunizacao;
 	}
 	
-	public static List<Imunizacoes> consultarImunizacoesPorIdPaciente(int idPaciente) throws SQLException {
-	    List<Imunizacoes> lista = new ArrayList<>();
+	public static List<DTOImunizacaoDosePaciente> consultarImunizacoesPorIdPaciente(int idPaciente) throws SQLException {
+	    List<DTOImunizacaoDosePaciente> lista = new ArrayList<>();
 	    
 	    String sql = "SELECT "
-	            + "i.id, "
+	            + "p.id, "
 	            + "p.nome, "
 	            + "v.vacina, "
 	            + "d.dose, "
@@ -182,9 +181,9 @@ public class ImunizacoesDAO {
 	            + "i.local_aplicacao, "
 	            + "i.profissional_aplicador "
 	            + "FROM imunizacoes i "
-	            + "JOIN pacientes p ON i.id_paciente = p.id "
-	            + "JOIN doses d ON i.id_dose = d.id "
-	            + "JOIN vacinas v ON d.id_vacina = v.id "
+	            + "JOIN paciente p ON i.id_paciente = p.id "
+	            + "JOIN dose d ON i.id_dose = d.id "
+	            + "JOIN vacina v ON d.id_vacina = v.id "
 	            + "WHERE i.id_paciente = ?";
 	    
 	    try (Connection conexao = ConexaoBanco.getConnection();
@@ -194,7 +193,7 @@ public class ImunizacoesDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            while (resultado.next()) {
-	                lista.add(new Imunizacoes(
+	                lista.add(new DTOImunizacaoDosePaciente(
 	                        resultado.getInt("id"),
 	                        resultado.getString("nome"),
 	                        resultado.getString("vacina"),
@@ -212,8 +211,8 @@ public class ImunizacoesDAO {
 	    return lista;
 	}
 	
-	public static List<Imunizacoes> consultarImunizacoesPorIdPacienteEPeriodo(int idPaciente, Date dtInicio, Date dtFim) throws SQLException {
-	    List<Imunizacoes> lista = new ArrayList<>();
+	public static List<DTOImunizacaoDosePaciente> consultarImunizacoesPorIdPacienteEPeriodo(int idPaciente, Date dtInicio, Date dtFim) throws SQLException {
+	    List<DTOImunizacaoDosePaciente> lista = new ArrayList<>();
 	    
 	    String sql = "SELECT "
 	            + "i.id, "
@@ -226,9 +225,9 @@ public class ImunizacoesDAO {
 	            + "i.local_aplicacao, "
 	            + "i.profissional_aplicador "
 	            + "FROM imunizacoes i "
-	            + "JOIN pacientes p ON i.id_paciente = p.id "
-	            + "JOIN doses d ON i.id_dose = d.id "
-	            + "JOIN vacinas v ON d.id_vacina = v.id "
+	            + "JOIN paciente p ON i.id_paciente = p.id "
+	            + "JOIN dose d ON i.id_dose = d.id "
+	            + "JOIN vacina v ON d.id_vacina = v.id "
 	            + "WHERE i.id_paciente = ? "
 	            + "AND i.data_aplicacao BETWEEN ? AND ?";
 	    
@@ -241,7 +240,7 @@ public class ImunizacoesDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            while (resultado.next()) {
-	                lista.add(new Imunizacoes(
+	                lista.add(new DTOImunizacaoDosePaciente(
 	                        resultado.getInt("id"),
 	                        resultado.getString("nome"),
 	                        resultado.getString("vacina"),

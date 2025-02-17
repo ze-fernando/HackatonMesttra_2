@@ -1,6 +1,6 @@
 package com.mesttra.vacinas.models;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Paciente {
     private int id;

@@ -14,7 +14,7 @@ import com.mesttra.vacinas.models.Paciente.Sexo;
 
 public class PacienteDAO {
 	public static void adicionarPaciente(Paciente paciente) throws SQLException{
-        String sql = "INSERT INTO pacientes (nome, cpf, sexo, data_nascimento,) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO paciente (nome, cpf, sexo, data_nascimento,) VALUES (?, ?, ?, ?)";
         
         try (Connection conexao = ConexaoBanco.getConnection();
              PreparedStatement comando = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -37,7 +37,7 @@ public class PacienteDAO {
         }
     }	
 	public static void alterarPaciente(Paciente paciente) throws SQLException {
-    	String sql = "UPDATE pacientes SET nome = ?, cpf = ?, sexo = ?, data_nascimento = ? WHERE id = ?";
+    	String sql = "UPDATE paciente SET nome = ?, cpf = ?, sexo = ?, data_nascimento = ? WHERE id = ?";
     	
     	try (Connection conexao = ConexaoBanco.getConnection();
 			 PreparedStatement comando = conexao.prepareStatement(sql)){
@@ -52,7 +52,7 @@ public class PacienteDAO {
     }
 	
 	public static void excluirPaciente(int id) throws SQLException {
-    	String sql = "DELETE FROM pacientes WHERE id = ?";
+    	String sql = "DELETE FROM paciente WHERE id = ?";
     	
     	try (Connection conexao = ConexaoBanco.getConnection();
 			 PreparedStatement comando = conexao.prepareStatement(sql)){
@@ -66,7 +66,7 @@ public class PacienteDAO {
 	public static List<Paciente> consultarTodosPacientes() throws SQLException{
     	List<Paciente> lista = new ArrayList<>();
     	
-    	String sql = "SELECT * FROM pacientes";
+    	String sql = "SELECT * FROM paciente";
     	
     	try (Connection conexao = ConexaoBanco.getConnection();
     		 Statement comando = conexao.createStatement();
@@ -86,7 +86,7 @@ public class PacienteDAO {
     }
 	
 	public static Paciente consultarPacientePorId(int id) throws SQLException {
-    	String sql = "SELECT * FROM pacientes WHERE Id = ?";
+    	String sql = "SELECT * FROM paciente WHERE Id = ?";
     	
     	Paciente paciente = null;
     	

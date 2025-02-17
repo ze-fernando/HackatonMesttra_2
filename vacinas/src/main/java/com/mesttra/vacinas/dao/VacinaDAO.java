@@ -9,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mesttra.vacinas.config.ConexaoBanco;
+import com.mesttra.vacinas.dto.DTOVacinaDose;
 import com.mesttra.vacinas.models.Vacina;
-import com.mesttra.vacinas.models.Vacina.Publico_alvo;
+import com.mesttra.vacinas.models.enums.PublicoAlvo;
 
 public class VacinaDAO {
 	public static List<Vacina> consultarTodasVacinas() throws SQLException{
     	List<Vacina> lista = new ArrayList<>();
     	
-    	String sql = "SELECT * FROM vacinas";
+    	String sql = "SELECT * FROM vacina";
     	
     	try (Connection conexao = ConexaoBanco.getConnection();
     		 Statement comando = conexao.createStatement();
@@ -27,19 +28,27 @@ public class VacinaDAO {
     			lista.add(new Vacina(	
 					resultado.getInt("id_dose"),
 					resultado.getString("vacina"),
-					resultado.getString("dose"),
-					resultado.getInt("idade_recomendada_aplicacao"),
+					resultado.getString("descricao"),
 					resultado.getInt("limite_aplicacao"),
-					Publico_alvo.valueOf(resultado.getString("publico_alvo"))));					   									
+					PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));					   									
     		}    		    			    					
 		}
     	return lista;
     }
 	
-	public static List<Vacina> consultarTodasVacinasPorFaixaEtaria(Publico_alvo publicoAlvo) throws SQLException {
-	    String sql = "SELECT * FROM vacinas WHERE publico_alvo = ?";
-
-	    List<Vacina> vacinas = new ArrayList<>(); 
+	public static List<DTOVacinaDose> consultarTodasVacinasPorFaixaEtaria(PublicoAlvo publicoAlvo) throws SQLException {
+	    String sql = "SELECT " 
+	    	    + "d.id, "
+	    	    + "v.vacina, "
+	    	    + "d.dose, " 
+	    	    + "d.idade_recomendada_aplicacao, "
+	    	    + "v.limite_aplicacao, "
+	    	    + "v.publico_alvo  " 
+	    	    + "FROM dose d "	    	     
+	    	    + "JOIN vacina v ON d.id_vacina = v.id "
+	    	    + "WHERE v.publico_alvo = ?";
+	    	 	    	    
+	    List<DTOVacinaDose> vacinas = new ArrayList<>(); 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
 
@@ -47,23 +56,32 @@ public class VacinaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            while (resultado.next()) {
-	                vacinas.add(new Vacina(
-	                    resultado.getInt("id_dose"),
+	                vacinas.add(new DTOVacinaDose(
+	                    resultado.getInt("id"),
 	                    resultado.getString("vacina"),
 	                    resultado.getString("dose"),
 	                    resultado.getInt("idade_recomendada_aplicacao"),
 	                    resultado.getInt("limite_aplicacao"),
-	                    Publico_alvo.valueOf(resultado.getString("publico_alvo"))));
+	                    DTOVacinaDose.PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));
 	            }
 	        }
 	    }
 	    return vacinas; 
 	}
 
-    public static List<Vacina> consultarTodasVacinasPorIdadeMaior(int meses) throws SQLException {
-        String sql = "SELECT * FROM vacinas WHERE idade_recomendada_aplicacao > ?";
+    public static List<DTOVacinaDose> consultarTodasVacinasPorIdadeMaior(int meses) throws SQLException {
+    	String sql = "SELECT "
+                + "v.id, "
+                + "v.vacina, "
+                + "v.descricao, "
+                + "d.dose, "
+                + "d.idade_recomendada_aplicacao "
+                + "FROM vacina v "
+                + "JOIN dose d ON d.id_vacina = v.id "
+                + "WHERE d.idade_recomendada_aplicacao > ?";
 
-        List<Vacina> vacinas = new ArrayList<>();
+
+        List<DTOVacinaDose> vacinas = new ArrayList<>();
 
         try (Connection conexao = ConexaoBanco.getConnection();
              PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -72,19 +90,48 @@ public class VacinaDAO {
 
             try (ResultSet resultado = comando.executeQuery()) {
                 while (resultado.next()) {
-                    vacinas.add(new Vacina(
-                            resultado.getInt("id_dose"),
+                    vacinas.add(new DTOVacinaDose(
+                            resultado.getInt("id"),
                             resultado.getString("vacina"),
                             resultado.getString("dose"),
                             resultado.getInt("idade_recomendada_aplicacao"),
                             resultado.getInt("limite_aplicacao"),
-                            Publico_alvo.valueOf(resultado.getString("publico_alvo"))));
+                            DTOVacinaDose.PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));
                 }
             }
         }
-
         return vacinas;
     }
 	
-    //TODO: Implementar o metodo consultarTodasVacinasNaoAplicaveis(int idPaciente)
+    public static List<DTOVacinaDose>consultarTodasVacinasNaoAplicaveis(int idPaciente) throws SQLException{
+    	String sql = "SELECT " 
+                + "d.dose, " 
+                + "v.vacina, " 
+                + "d.idade_recomendada_aplicacao AS limite_aplicacao "
+                + "FROM vacina v "
+                + "JOIN dose d ON d.id_vacina = v.id "
+                + "JOIN paciente p ON p.id = ? "
+                + "WHERE TIMESTAMPDIFF(MONTH, p.data_nascimento, CURDATE()) > d.idade_recomendada_aplicacao";
+
+
+        List<DTOVacinaDose> vacinas = new ArrayList<>();
+
+        try (Connection conexao = ConexaoBanco.getConnection();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setInt(1, idPaciente);
+
+            try (ResultSet resultado = comando.executeQuery()) {
+                while (resultado.next()) {
+                    vacinas.add(new DTOVacinaDose(
+                            resultado.getInt("id"),
+                            resultado.getString("vacina"),
+                            resultado.getString("dose"),                           
+                            resultado.getInt("limite_aplicacao")));
+                            
+                }
+            }
+        }
+        return vacinas;
+    }
 }
