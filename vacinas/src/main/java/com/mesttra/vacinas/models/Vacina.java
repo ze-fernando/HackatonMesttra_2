@@ -6,14 +6,7 @@ public class Vacina {
     private String vacina;
     private String descricao;
     private int limite_aplicacao;
-    private Publico_alvo  publico_alvo;
-    
-    public enum Publico_alvo {
-    	CRIANÇA, 
-    	ADOLESCENTE, 
-    	ADULTO, 
-    	GESTANTE
-    }
+    private PublicoAlvo  publico_alvo;
 
     public Vacina(int id, String vacina, String descricao, int limite_aplicacao, Publico_alvo publico_alvo){
         this.id = id;
