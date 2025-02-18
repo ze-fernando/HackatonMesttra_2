@@ -17,7 +17,8 @@ public class EstatisticasService {
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinas = EstatisticasDAO.getQtdVacinasById(idPaciente);
+                    int qtdVacinas = EstatisticasDAO
+                    .qtdeVacinasAplicadasPorPaciente(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinas + ".\"}" ;
                     
@@ -36,7 +37,8 @@ public class EstatisticasService {
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinasProxMes = EstatisticasDAO.getQtdVacinasForNextMonth(idPaciente);
+                    int qtdVacinasProxMes = EstatisticasDAO
+                    .qtdeProximasImunizacoes(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
                     
@@ -55,7 +57,8 @@ public class EstatisticasService {
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinasAtrasadas = EstatisticasDAO.getQtdVacinasAtrasadas(idPaciente);
+                    int qtdVacinasAtrasadas = EstatisticasDAO
+                    .consultarQtdeVacinasAtrasadasPorPaciente(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas Atrasadas" + qtdVacinasAtrasadas + ".\"}" ;
                     
@@ -75,7 +78,8 @@ public class EstatisticasService {
                 String month = req.queryParams("meses");
 
                 try {
-                    // int qtdVacinasProxMes = EstatisticasDAO.getQtdVacinasForNextMonth(idPaciente, month);
+                    int qtdVacinasAcimaIdade = EstatisticasDAO
+                    .consultarVacinasAcimaDeIdade(idPaciente, month);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
                     
@@ -94,7 +98,8 @@ public class EstatisticasService {
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinasNotApplicable = EstatisticasDAO.getQtdVacinasNotApplicable(idPaciente);
+                    int qtdVacinasNotApplicable = EstatisticasDAO
+                    .consultarVacinasNaoAplicaveis(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasNotApplicable + ".\"}" ;
                     
