@@ -10,8 +10,8 @@ import com.mesttra.vacinas.dto.DTOImunizacaoVacinaPaciente;
 
 
 public class EstatisticaDAO {
-	public static DTOImunizacaoVacinaPaciente qtdeVacinasAplicadasPorPaciente(int idPaciente ) throws SQLException{
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int qtdeVacinasAplicadasPorPaciente(int idPaciente ) throws SQLException{
+		int estatistica = 0;
 	    
 		String sql = "SELECT COUNT(*) AS quantidadeVacinasAplicadas "
 	               + "FROM imunizacoes "
@@ -24,9 +24,7 @@ public class EstatisticaDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	                estatistica = new DTOImunizacaoVacinaPaciente(
-	                        resultado.getInt("id"),
-	                        resultado.getInt("qtdeVacinasAplicadas"));
+	                estatistica = resultado.getInt("qtdeVacinasAplicadas");
 	            }
 	        }
 	    }
@@ -34,8 +32,8 @@ public class EstatisticaDAO {
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente qtdeProximasImunizacoes(int idPaciente ) throws SQLException{
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int qtdeProximasImunizacoes(int idPaciente ) throws SQLException{
+		int estatistica = 0;
 	    
 		String sql = "";
 	    
@@ -46,9 +44,7 @@ public class EstatisticaDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	                estatistica = new DTOImunizacaoVacinaPaciente(
-	                        resultado.getInt("id"),
-	                        resultado.getInt("qtdeVacinasParaProximoMes"));
+	                estatistica = resultado.getInt("qtdeVacinasParaProximoMes");
 	            }
 	        }
 	    }
@@ -56,8 +52,8 @@ public class EstatisticaDAO {
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente consultarQtdeVacinasAtrasadasPorPaciente(int idPaciente) throws SQLException {
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int consultarQtdeVacinasAtrasadasPorPaciente(int idPaciente) throws SQLException {
+		int estatistica = 0;
 		
 		String sql = "";
 
@@ -68,16 +64,15 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	resultado.getInt("id");
-	                resultado.getInt("qtdVacinasNaoAplicadas");
+	                estatistica = resultado.getInt("qtdVacinasNaoAplicadas");
 	            }
 	        }
 	    }
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente consultarVacinasAcimaDeIdade(int meses) throws SQLException {
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int consultarVacinasAcimaDeIdade(int meses) throws SQLException {
+		int estatistica = 0;
 		
 		String sql = "";
 
@@ -88,16 +83,15 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	resultado.getInt("id");
-	                resultado.getInt("qtdeVacinasAcimaDaIdade");
+	                estatistica = resultado.getInt("qtdeVacinasAcimaDaIdade");
 	            }
 	        }
 	    }
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente consultarVacinasNaoAplicaveis(int idPaciente) throws SQLException {
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int consultarVacinasNaoAplicaveis(int idPaciente) throws SQLException {
+		int estatistica = 0;
 		
 		String sql = "";
 
@@ -108,8 +102,7 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	 resultado.getInt("id");
-	                 resultado.getInt("qtdVacinasNaoAplicaveis");
+					estatistica = resultado.getInt("qtdVacinasNaoAplicaveis");
 	            }
 	        }
 	    }
