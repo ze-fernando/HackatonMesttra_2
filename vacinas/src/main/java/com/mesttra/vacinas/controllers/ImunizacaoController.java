@@ -6,7 +6,7 @@ import com.mesttra.vacinas.services.ImunizacaoService;
 
 public class ImunizacaoController {
 
-    public void getControllers() {
+    public static void getControllers() {
 
         // Criar uma nova imunização
         post("/imunizacao/inserir", ImunizacaoService.createImunizacao());

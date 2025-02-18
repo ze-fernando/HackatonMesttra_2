@@ -86,7 +86,7 @@ public class ImunizacaoService {
         };
     }
 
-    public static Route readImunizacoesByPacienteIdAndPeriodo() {
+    public static Route readImunizacoesByPacienteAndDate() {
         return new Route() {
             @Override
             public Object handle(Request req, Response res) {

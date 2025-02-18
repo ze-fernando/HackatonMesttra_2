@@ -4,7 +4,7 @@ import static spark.Spark.*;
 
 import com.mesttra.vacinas.services.VacinaService;
 
-public classe VacinaController {
+public class VacinaController {
 
     public void getControllers(){
 

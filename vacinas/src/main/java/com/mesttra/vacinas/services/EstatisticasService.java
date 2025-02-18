@@ -7,17 +7,18 @@ import spark.Route;
 
 import com.mesttra.vacinas.models.Paciente;
 import com.mesttra.vacinas.dao.PacienteDAO;
+import com.mesttra.vacinas.dao.EstatisticaDAO;
 
 public class EstatisticasService {
 
     public static Route readQtdeVacinasByPaciente(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    int qtdVacinas = EstatisticasDAO
+                    int qtdVacinas = EstatisticaDAO
                     .qtdeVacinasAplicadasPorPaciente(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinas + ".\"}" ;
@@ -33,11 +34,11 @@ public class EstatisticasService {
     public static Route readQtdeProximasImunizacoes(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    int qtdVacinasProxMes = EstatisticasDAO
+                    int qtdVacinasProxMes = EstatisticaDAO
                     .qtdeProximasImunizacoes(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
@@ -53,11 +54,11 @@ public class EstatisticasService {
     public static Route readQtdeVacinasAtrasadas(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    int qtdVacinasAtrasadas = EstatisticasDAO
+                    int qtdVacinasAtrasadas = EstatisticaDAO
                     .consultarQtdeVacinasAtrasadasPorPaciente(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas Atrasadas" + qtdVacinasAtrasadas + ".\"}" ;
@@ -73,12 +74,12 @@ public class EstatisticasService {
     public static Route readQtdeIdadeAcima(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
                 String month = req.queryParams("meses");
 
                 try {
-                    int qtdVacinasAcimaIdade = EstatisticasDAO
+                    int qtdVacinasAcimaIdade = EstatisticaDAO
                     .consultarVacinasAcimaDeIdade(idPaciente, month);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
@@ -94,11 +95,11 @@ public class EstatisticasService {
     public static Route readQtdeNaoAplicaveis(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    int qtdVacinasNotApplicable = EstatisticasDAO
+                    int qtdVacinasNotApplicable = EstatisticaDAO
                     .consultarVacinasNaoAplicaveis(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasNotApplicable + ".\"}" ;

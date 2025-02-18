@@ -37,7 +37,7 @@ public class EstatisticaDAO {
 	public static DTOImunizacaoVacinaPaciente qtdeProximasImunizacoes(int idPaciente ) throws SQLException{
 		DTOImunizacaoVacinaPaciente estatistica = null;
 	    
-//		String sql = TODO implementar o código sql aqui
+		String sql = "";
 	    
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -59,7 +59,7 @@ public class EstatisticaDAO {
 	public static DTOImunizacaoVacinaPaciente consultarQtdeVacinasAtrasadasPorPaciente(int idPaciente) throws SQLException {
 		DTOImunizacaoVacinaPaciente estatistica = null;
 		
-//		String sql = TODO implementar o código sql aqui
+		String sql = "";
 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class EstatisticaDAO {
 	public static DTOImunizacaoVacinaPaciente consultarVacinasAcimaDeIdade(int meses) throws SQLException {
 		DTOImunizacaoVacinaPaciente estatistica = null;
 		
-//		String sql = TODO implementar o código sql aqui
+		String sql = "";
 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -99,7 +99,7 @@ public class EstatisticaDAO {
 	public static DTOImunizacaoVacinaPaciente consultarVacinasNaoAplicaveis(int idPaciente) throws SQLException {
 		DTOImunizacaoVacinaPaciente estatistica = null;
 		
-//		String sql = TODO implementar o código sql aqui
+		String sql = "";
 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
