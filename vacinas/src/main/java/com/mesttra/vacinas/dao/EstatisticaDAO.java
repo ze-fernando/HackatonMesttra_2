@@ -71,7 +71,7 @@ public class EstatisticaDAO {
 	    return estatistica;
 	}
 	
-	public static int consultarVacinasAcimaDeIdade(int meses) throws SQLException {
+	public static int consultarVacinasAcimaDeIdade(int meses, int month) throws SQLException {
 		int estatistica = 0;
 		
 		String sql = "";

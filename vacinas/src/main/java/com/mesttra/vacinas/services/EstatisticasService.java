@@ -76,13 +76,14 @@ public class EstatisticasService {
             @Override
             public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
-                String month = req.queryParams("meses");
+                int month = Integer.parseInt(req.queryParams("meses"));
 
                 try {
                     int qtdVacinasAcimaIdade = EstatisticaDAO
                     .consultarVacinasAcimaDeIdade(idPaciente, month);
+
                     res.status(200);
-                    return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
+                    return "{\"message\": \"Vacinas " + qtdVacinasAcimaIdade + ".\"}" ;
                     
                 } catch (Exception e) {
                     res.status(500);
