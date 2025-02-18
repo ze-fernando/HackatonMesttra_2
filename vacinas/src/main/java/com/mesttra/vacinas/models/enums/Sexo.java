@@ -1,4 +1,4 @@
-package com.mesttra.vacinas.models;
+package com.mesttra.vacinas.models.enums;
 
 public enum Sexo {
     M,

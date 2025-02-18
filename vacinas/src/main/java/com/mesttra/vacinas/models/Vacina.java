@@ -1,5 +1,7 @@
 package com.mesttra.vacinas.models;
 
+import com.mesttra.vacinas.models.enums.PublicoAlvo;
+
 public class Vacina {
 
     private int id;
@@ -8,7 +10,7 @@ public class Vacina {
     private int limite_aplicacao;
     private PublicoAlvo  publico_alvo;
 
-    public Vacina(int id, String vacina, String descricao, int limite_aplicacao, Publico_alvo publico_alvo){
+    public Vacina(int id, String vacina, String descricao, int limite_aplicacao, PublicoAlvo publico_alvo){
         this.id = id;
         this.vacina = vacina;
         this.descricao = descricao;
@@ -48,11 +50,11 @@ public class Vacina {
         this.limite_aplicacao = limite_aplicacao;
     }
 
-    public Publico_alvo getPublico_alvo(){
+    public PublicoAlvo getPublico_alvo(){
         return publico_alvo;
     }
 
-    public void setPublico_alvo(Publico_alvo publico_alvo){
+    public void setPublico_alvo(PublicoAlvo publico_alvo){
         this.publico_alvo = publico_alvo;
     }
 }
