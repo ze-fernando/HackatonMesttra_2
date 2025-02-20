@@ -6,7 +6,7 @@ import com.mesttra.vacinas.services.PacienteService;
 
 public class PacienteController {
 
-    public void getControllers() {
+    public static void getControllers() {
         // Criar um novo paciente
         post("/paciente/inserir", PacienteService.createPaciente());
         

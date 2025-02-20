@@ -15,10 +15,10 @@ public class PacienteService {
             @Override
             public Object handle(Request req, Response res){       
                     var newPaciente = new Paciente(
-                    req.queryParams("nome"),
-                    req.queryParams("cpf"),
-                    req.queryParams("sexo"),
-                    req.queryParams("nascimento")
+                        req.queryParams("nome"),
+                        req.queryParams("cpf"),
+                        req.queryParams("sexo"),
+                        req.queryParams("nascimento")
                 );
                 try {
                     
@@ -81,6 +81,11 @@ public class PacienteService {
                         res.status(404);
                         return "{\"message\": \"Paciente não encontrado.\"}";
                     }
+
+                    pacienteDb.setNome(req.queryParams("nome"));
+                    pacienteDb.setCpf(req.queryParams("cpf"));
+                    pacienteDb.setDataNascimento(req.queryParams("sexo"));
+                    pacienteDb.setSexo(req.queryParams("nascimento"));
     
                     PacienteDAO.alterarPaciente(pacienteDb);
                     res.status(200);
@@ -97,7 +102,7 @@ public class PacienteService {
     public static Route deletePaciente() {
         return new Route() {
             @Override
-            public Object handle(Request req, Response res) {
+            public Object handle(Request req, Response res){ 
                 int id = Integer.parseInt(req.params(":id"));
                 try {
     
@@ -111,5 +116,5 @@ public class PacienteService {
                 }
             }
         };
-    };
+    }
 }

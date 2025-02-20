@@ -7,17 +7,19 @@ import spark.Route;
 
 import com.mesttra.vacinas.models.Paciente;
 import com.mesttra.vacinas.dao.PacienteDAO;
+import com.mesttra.vacinas.dao.EstatisticaDAO;
 
 public class EstatisticasService {
 
     public static Route readQtdeVacinasByPaciente(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinas = EstatisticasDAO.getQtdVacinasById(idPaciente);
+                    int qtdVacinas = EstatisticaDAO
+                    .qtdeVacinasAplicadasPorPaciente(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinas + ".\"}" ;
                     
@@ -32,11 +34,12 @@ public class EstatisticasService {
     public static Route readQtdeProximasImunizacoes(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinasProxMes = EstatisticasDAO.getQtdVacinasForNextMonth(idPaciente);
+                    int qtdVacinasProxMes = EstatisticaDAO
+                    .qtdeProximasImunizacoes(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
                     
@@ -51,11 +54,12 @@ public class EstatisticasService {
     public static Route readQtdeVacinasAtrasadas(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinasAtrasadas = EstatisticasDAO.getQtdVacinasAtrasadas(idPaciente);
+                    int qtdVacinasAtrasadas = EstatisticaDAO
+                    .consultarQtdeVacinasAtrasadasPorPaciente(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas Atrasadas" + qtdVacinasAtrasadas + ".\"}" ;
                     
@@ -70,14 +74,16 @@ public class EstatisticasService {
     public static Route readQtdeIdadeAcima(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
-                String month = req.queryParams("meses");
+                int month = Integer.parseInt(req.queryParams("meses"));
 
                 try {
-                    // int qtdVacinasProxMes = EstatisticasDAO.getQtdVacinasForNextMonth(idPaciente, month);
+                    int qtdVacinasAcimaIdade = EstatisticaDAO
+                    .consultarVacinasAcimaDeIdade(idPaciente, month);
+
                     res.status(200);
-                    return "{\"message\": \"Vacinas " + qtdVacinasProxMes + ".\"}" ;
+                    return "{\"message\": \"Vacinas " + qtdVacinasAcimaIdade + ".\"}" ;
                     
                 } catch (Exception e) {
                     res.status(500);
@@ -90,11 +96,12 @@ public class EstatisticasService {
     public static Route readQtdeNaoAplicaveis(){
         return new Route() {
             @Override
-            public static Object handle(Request req, Response res){
+            public Object handle(Request req, Response res){
                 int idPaciente = Integer.parseInt(req.queryParams("id"));
 
                 try {
-                    // int qtdVacinasNotApplicable = EstatisticasDAO.getQtdVacinasNotApplicable(idPaciente);
+                    int qtdVacinasNotApplicable = EstatisticaDAO
+                    .consultarVacinasNaoAplicaveis(idPaciente);
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasNotApplicable + ".\"}" ;
                     

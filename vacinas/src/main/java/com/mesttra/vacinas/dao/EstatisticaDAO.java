@@ -22,7 +22,7 @@ public class EstatisticaDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	                estatistica = resultado.getInt("qtdeVacinasAplicadas");	                        	                        
+	                estatistica = resultado.getInt("qtdeVacinasAplicadas");
 	            }
 	        }
 	    }	    
@@ -37,6 +37,7 @@ public class EstatisticaDAO {
                 "JOIN vacina v ON d.id_vacina = v.id " +
                 "WHERE d.idade_recomendada_aplicacao = TIMESTAMPDIFF(MONTH, " +
                 "    (SELECT data_nascimento FROM paciente WHERE id = ?), CURDATE()) + 1";
+
 	    
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -70,7 +71,6 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	      
 	                estatistica = resultado.getInt("qtdVacinasNaoAplicadas");
 	            }
 	        }
@@ -90,7 +90,6 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	
 	            	estatistica = resultado.getInt("qtdeVacinasAcimaDaIdade");	                
 	            }
 	        }
@@ -115,7 +114,6 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	 
 	                 estatistica = resultado.getInt("qtdVacinasNaoAplicaveis");
 	            }
 	        }
