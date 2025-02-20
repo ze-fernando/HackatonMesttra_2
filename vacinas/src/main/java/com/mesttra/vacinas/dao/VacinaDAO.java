@@ -62,7 +62,7 @@ public class VacinaDAO {
 	                    resultado.getString("dose"),
 	                    resultado.getInt("idade_recomendada_aplicacao"),
 	                    resultado.getInt("limite_aplicacao"),
-	                    DTOVacinaDose.PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));
+	                    PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));
 	            }
 	        }
 	    }
@@ -96,7 +96,7 @@ public class VacinaDAO {
                             resultado.getString("dose"),
                             resultado.getInt("idade_recomendada_aplicacao"),
                             resultado.getInt("limite_aplicacao"),
-                            DTOVacinaDose.PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));
+                            PublicoAlvo.valueOf(resultado.getString("publico_alvo"))));
                 }
             }
         }

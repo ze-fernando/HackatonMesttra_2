@@ -6,12 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mesttra.vacinas.config.ConexaoBanco;
-import com.mesttra.vacinas.dto.DTOImunizacaoVacinaPaciente;
-
 
 public class EstatisticaDAO {
-	public static DTOImunizacaoVacinaPaciente qtdeVacinasAplicadasPorPaciente(int idPaciente ) throws SQLException{
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int qtdeVacinasAplicadasPorPaciente(int idPaciente ) throws SQLException{
+		int estatistica = 0;
 	    
 		String sql = "SELECT COUNT(*) AS quantidadeVacinasAplicadas "
 	               + "FROM imunizacoes "
@@ -24,20 +22,21 @@ public class EstatisticaDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	                estatistica = new DTOImunizacaoVacinaPaciente(
-	                        resultado.getInt("id"),
-	                        resultado.getInt("qtdeVacinasAplicadas"));
+	                estatistica = resultado.getInt("qtdeVacinasAplicadas");	                        	                        
 	            }
 	        }
-	    }
-	    
+	    }	    
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente qtdeProximasImunizacoes(int idPaciente ) throws SQLException{
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int qtdeProximasImunizacoes(int idPaciente ) throws SQLException{
+		int estatistica = 0;
 	    
-//		String sql = TODO implementar o código sql aqui
+		String sql = "SELECT COUNT(*) AS qtdeVacinasParaProximoMes " +
+                "FROM dose d " +
+                "JOIN vacina v ON d.id_vacina = v.id " +
+                "WHERE d.idade_recomendada_aplicacao = TIMESTAMPDIFF(MONTH, " +
+                "    (SELECT data_nascimento FROM paciente WHERE id = ?), CURDATE()) + 1";
 	    
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -46,9 +45,7 @@ public class EstatisticaDAO {
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	                estatistica = new DTOImunizacaoVacinaPaciente(
-	                        resultado.getInt("id"),
-	                        resultado.getInt("qtdeVacinasParaProximoMes"));
+	                estatistica = resultado.getInt("qtdeVacinasParaProximoMes");                        
 	            }
 	        }
 	    }
@@ -56,10 +53,15 @@ public class EstatisticaDAO {
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente consultarQtdeVacinasAtrasadasPorPaciente(int idPaciente) throws SQLException {
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int consultarQtdeVacinasAtrasadasPorPaciente(int idPaciente) throws SQLException {
+		 int estatistica = 0;
 		
-//		String sql = TODO implementar o código sql aqui
+		 String sql = "SELECT COUNT(*) AS qtdVacinasNaoAplicadas " +
+			 		"FROM dose d " +
+			 		"JOIN vacina v ON d.id_vacina = v.id " +
+			 		"WHERE d.idade_recomendada_aplicacao <= TIMESTAMPDIFF(MONTH, " +
+			 		"    (SELECT data_nascimento FROM paciente WHERE id = ?), CURDATE()) " +
+			 		"AND d.id NOT IN (SELECT id_dose FROM imunizacoes WHERE id_paciente = ?)";
 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -68,18 +70,18 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	resultado.getInt("id");
-	                resultado.getInt("qtdVacinasNaoAplicadas");
+	      
+	                estatistica = resultado.getInt("qtdVacinasNaoAplicadas");
 	            }
 	        }
 	    }
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente consultarVacinasAcimaDeIdade(int meses) throws SQLException {
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int consultarVacinasAcimaDeIdade(int meses) throws SQLException {
+		 int estatistica = 0;
 		
-//		String sql = TODO implementar o código sql aqui
+		String sql = "SELECT COUNT(*) AS qtde_vacinas FROM dose WHERE qtdeVacinasAcimaDaIdade > ?";
 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -88,18 +90,23 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	resultado.getInt("id");
-	                resultado.getInt("qtdeVacinasAcimaDaIdade");
+	            	
+	            	estatistica = resultado.getInt("qtdeVacinasAcimaDaIdade");	                
 	            }
 	        }
 	    }
 	    return estatistica;
 	}
 	
-	public static DTOImunizacaoVacinaPaciente consultarVacinasNaoAplicaveis(int idPaciente) throws SQLException {
-		DTOImunizacaoVacinaPaciente estatistica = null;
+	public static int consultarVacinasNaoAplicaveis(int idPaciente) throws SQLException {
+		int estatistica = 0;
 		
-//		String sql = TODO implementar o código sql aqui
+		String sql = "SELECT COUNT(*) AS qtdVacinasNaoAplicaveis " +
+					"FROM vacina v " +
+					"JOIN dose d ON v.id = d.id_vacina " +
+					"WHERE v.limite_aplicacao IS NOT NULL " +
+					"AND v.limite_aplicacao < TIMESTAMPDIFF(MONTH, " +
+					"(SELECT data_nascimento FROM paciente WHERE id = ?), CURDATE())";
 
 	    try (Connection conexao = ConexaoBanco.getConnection();
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -108,8 +115,8 @@ public class EstatisticaDAO {
 
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            if (resultado.next()) {
-	            	 resultado.getInt("id");
-	                 resultado.getInt("qtdVacinasNaoAplicaveis");
+	            	 
+	                 estatistica = resultado.getInt("qtdVacinasNaoAplicaveis");
 	            }
 	        }
 	    }
