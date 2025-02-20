@@ -43,7 +43,7 @@ public class Main {
             ImunizacaoController.getControllers();
             EstatisticasController.getControllers();
             PacienteController.getControllers();
-            //VacinaController.getControllers();
+            VacinaController.getControllers();
 
         } catch (Exception e) {
             e.printStackTrace();
