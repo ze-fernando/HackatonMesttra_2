@@ -1,5 +1,7 @@
 package com.mesttra.vacinas.dto;
 
+import com.mesttra.vacinas.models.enums.PublicoAlvo;
+
 public class DTOVacinaDose {
 	public int id;
 	public String vacina;
@@ -8,13 +10,6 @@ public class DTOVacinaDose {
 	public int limite_aplicacao;
 	public PublicoAlvo  publico_alvo;
     
-    public enum PublicoAlvo {
-    	CRIANÇA, 
-    	ADOLESCENTE, 
-    	ADULTO, 
-    	GESTANTE
-    }
-
 	public DTOVacinaDose(int id, String vacina, String dose, int idade_recomendada_aplicacao, int limite_aplicacao,
 			PublicoAlvo publico_alvo) {
 		
