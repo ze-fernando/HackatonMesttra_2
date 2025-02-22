@@ -1,7 +1,6 @@
 package com.mesttra.vacinas.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,20 +40,20 @@ public class ImunizacoesDAO {
         }
     }
 	
-	public static void alterarImunizacao(Imunizacoes imunizacao) throws SQLException {
+	public static void alterarImunizacao(DTOImunizacaoDosePaciente imunizacaoDb) throws SQLException {
     	String sql = "UPDATE imunizacoes SET data_aplicacao = ?, fabricante = ?, lote = ?, local_aplicacao = ?, "
     			+ "profissional_aplicador = ? WHERE id = ?";
     	
     	try (Connection conexao = ConexaoBanco.getConnection();
 			 PreparedStatement comando = conexao.prepareStatement(sql)){
     		
-    		comando.setDate(1, new java.sql.Date(imunizacao.getData_aplicacao().getTime()));
-            comando.setString(2, imunizacao.getFabricante());
-            comando.setString(3, imunizacao.getLote());         
-            comando.setString(4, imunizacao.getLocal_aplicacao()); 
-            comando.setString(5, imunizacao.getProfissional_aplicador()); 
-            comando.setString(6, imunizacao.getLocal_aplicacao()); 
-            comando.setInt(7, imunizacao.getId()); 
+    		comando.setDate(1, new java.sql.Date(imunizacaoDb.getData_aplicacao().getTime()));
+            comando.setString(2, imunizacaoDb.getFabricante());
+            comando.setString(3, imunizacaoDb.getLote());         
+			comando.setDate(4, new java.sql.Date(imunizacaoDb.getData_aplicacao().getTime())); 
+            comando.setString(5, imunizacaoDb.getProfissional_aplicador()); 
+			comando.setDate(6, new java.sql.Date(imunizacaoDb.getData_aplicacao().getTime())); 
+            comando.setInt(7, imunizacaoDb.getId()); 
             
             comando.executeUpdate();
         }
@@ -211,7 +210,7 @@ public class ImunizacoesDAO {
 	    return lista;
 	}
 	
-	public static List<DTOImunizacaoDosePaciente> consultarImunizacoesPorIdPacienteEPeriodo(int idPaciente, Date dtInicio, Date dtFim) throws SQLException {
+	public static List<DTOImunizacaoDosePaciente> consultarImunizacoesPorIdPacienteEPeriodo(int idPaciente, String dataInicio, String dataFim) throws SQLException {
 	    List<DTOImunizacaoDosePaciente> lista = new ArrayList<>();
 	    
 	    String sql = "SELECT "
@@ -235,8 +234,8 @@ public class ImunizacoesDAO {
 	         PreparedStatement comando = conexao.prepareStatement(sql)) {
 	        
 	        comando.setInt(1, idPaciente);
-	        comando.setDate(2, dtInicio);  
-	        comando.setDate(3, dtFim);     
+			comando.setDate(2, java.sql.Date.valueOf(dataInicio));  
+			comando.setDate(3, java.sql.Date.valueOf(dataFim));     
 	        
 	        try (ResultSet resultado = comando.executeQuery()) {
 	            while (resultado.next()) {

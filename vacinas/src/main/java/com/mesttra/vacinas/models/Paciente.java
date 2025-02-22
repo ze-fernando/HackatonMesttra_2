@@ -10,10 +10,13 @@ public class Paciente {
     private Date dataNascimento;
     
     public enum Sexo {
-    	M, F  	
+        M, F
     }
 
-    
+    public Paciente() {
+        // Construtor padrão
+    }
+
     public Paciente(int id, String nome, String cpf, Sexo sexo, Date dataNascimento) {
         this.id = id;
         this.nome = nome;
@@ -21,7 +24,7 @@ public class Paciente {
         this.sexo = sexo;
         this.dataNascimento = dataNascimento;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -58,7 +61,7 @@ public class Paciente {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setDataNascimento(java.util.Date dataNascimento) {
+        this.dataNascimento = new Date(dataNascimento.getTime());
     }
 }

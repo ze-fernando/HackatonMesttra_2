@@ -6,7 +6,12 @@ import spark.Route;
 
 
 import com.mesttra.vacinas.models.Paciente;
+
+import java.util.List;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import com.mesttra.vacinas.dao.PacienteDAO;
+import com.mesttra.vacinas.models.Paciente.Sexo;
 
 public class PacienteService {
     
@@ -14,22 +19,41 @@ public class PacienteService {
         return new Route() {
             @Override
             public Object handle(Request req, Response res){       
-                    var newPaciente = new Paciente(
-                        req.queryParams("nome"),
-                        req.queryParams("cpf"),
-                        req.queryParams("sexo"),
-                        req.queryParams("nascimento")
-                );
                 try {
+                    // Convertendo os parâmetros da requisição
+                    String nome = req.queryParams("nome");
+                    String cpf = req.queryParams("cpf");
+                    String sexoParam = req.queryParams("sexo");
+                    String nascimentoParam = req.queryParams("nascimento");
+
+                    // Validando os parâmetros
+                    if (nome == null || cpf == null || sexoParam == null || nascimentoParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"Todos os campos são obrigatórios.\"}";
+                    }
+
+                    Sexo sexo;
+                    try {
+                        sexo = Sexo.valueOf(sexoParam.toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        res.status(400);
+                        return "{\"error\": \"Sexo inválido. Use 'M' ou 'F'.\"}";
+                    }
+
+                    Date dataNascimento = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(nascimentoParam).getTime());
+
+                    // Criando o novo paciente
+                    Paciente newPaciente = new Paciente(0, nome, cpf, sexo, dataNascimento);
                     
+                    // Adicionando o paciente ao banco de dados
                     PacienteDAO.adicionarPaciente(newPaciente);
                     res.status(201);
 
-                    return "{\"message\": \"Paciente " + newPaciente + " com sucesso.\"}" ;
+                    return "{\"message\": \"Paciente " + newPaciente.getNome() + " inserido com sucesso.\"}" ;
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}" ;
-                };
+                }
             };
         };
     }
@@ -82,10 +106,10 @@ public class PacienteService {
                         return "{\"message\": \"Paciente não encontrado.\"}";
                     }
 
-                    pacienteDb.setNome(req.queryParams("nome"));
+                    pacienteDb.setDataNascimento(new SimpleDateFormat("yyyy-MM-dd").parse(req.queryParams("nascimento")));
                     pacienteDb.setCpf(req.queryParams("cpf"));
-                    pacienteDb.setDataNascimento(req.queryParams("sexo"));
-                    pacienteDb.setSexo(req.queryParams("nascimento"));
+                    pacienteDb.setDataNascimento(new SimpleDateFormat("yyyy-MM-dd").parse(req.queryParams("nascimento")));
+                    pacienteDb.setSexo(Paciente.Sexo.valueOf(req.queryParams("sexo").toUpperCase()));
     
                     PacienteDAO.alterarPaciente(pacienteDb);
                     res.status(200);

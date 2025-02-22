@@ -36,7 +36,7 @@ public class Imunizacoes {
         return id_paciente;
     }
 
-    public void setId_paciente(){
+    public void setId_paciente(int id_paciente){
         this.id_paciente = id_paciente;
     }
     // ------
@@ -45,7 +45,7 @@ public class Imunizacoes {
         return id_dose;
     }
 
-    public void setId_dose(){
+    public void setId_dose(int id_dose){
         this.id_dose = id_dose;
     }
     // -----
@@ -54,7 +54,7 @@ public class Imunizacoes {
         return data_aplicacao;
     }
 
-    public void setData_aplicacao(){
+    public void setData_aplicacao(Date data_aplicacao){
         this.data_aplicacao = data_aplicacao;
     }
     // -----

@@ -1,6 +1,7 @@
 package com.mesttra.vacinas.services;
 
 import com.mesttra.vacinas.dao.ImunizacoesDAO;
+import com.mesttra.vacinas.dto.DTOImunizacaoDosePaciente;
 import com.mesttra.vacinas.models.Imunizacoes;
 import spark.Request;
 import spark.Response;
@@ -16,9 +17,9 @@ public class ImunizacaoService {
             public Object handle(Request req, Response res) {
                 try {
                     Imunizacoes newImunizacao = new Imunizacoes(
-                            req.queryParams("paciente_id"),
-                            req.queryParams("vacina_id"),
-                            req.queryParams("data_aplicacao"));
+                            0, 0, 0, null, req.queryParams("paciente_id"),
+                                                        req.queryParams("vacina_id"),
+                                                        req.queryParams("data_aplicacao"), null);
 
                     ImunizacoesDAO.adicionarImunizacao(newImunizacao);
                     res.status(201);
@@ -36,7 +37,7 @@ public class ImunizacaoService {
             @Override
             public Object handle(Request req, Response res) {
                 try {
-                    List<Imunizacoes> imunizacoes = ImunizacoesDAO.consultarTodasImunizacoes();
+                    List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO.consultarTodasImunizacoes();
                     res.status(200);
                     return "{\"message\": \"" + imunizacoes.toString() + "\"}";
                 } catch (Exception e) {
@@ -53,13 +54,13 @@ public class ImunizacaoService {
             public Object handle(Request req, Response res) {
                 try {
                     int id = Integer.parseInt(req.params(":id"));
-                    Imunizacoes imunizacao = ImunizacoesDAO.consultarImunizacaoPorIdImunizacao(id);
+                    DTOImunizacaoDosePaciente imunizacao = ImunizacoesDAO.consultarImunizacaoPorIdImunizacao(id);
 
                     if (imunizacao == null) {
                         res.status(404);
                         return "{\"message\": \" Imunização não encontrada \"}";
                     }
-                    res.staus(200);
+                    res.status(200);
                     return "{\"message\": \"" + imunizacao.toString() + "\"}";
                 } catch (Exception e) {
                     res.status(500);
@@ -75,7 +76,7 @@ public class ImunizacaoService {
             public Object handle(Request req, Response res) {
                 try {
                     int pacienteId = Integer.parseInt(req.params(":id"));
-                    List<Imunizacoes> imunizacoes = ImunizacoesDAO.consultarImunizacoesPorIdPaciente(pacienteId);
+                    List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO.consultarImunizacoesPorIdPaciente(pacienteId);
                     res.status(200);
                     return "{\"message\": \"" + imunizacoes.toString() + "\"}";
                 } catch (Exception e) {
@@ -95,7 +96,7 @@ public class ImunizacaoService {
                     String dataInicio = req.queryParams("data_inicio");
                     String dataFim = req.queryParams("data_fim");
 
-                    List<Imunizacoes> imunizacoes = ImunizacoesDAO
+                    List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO
                             .consultarImunizacoesPorIdPacienteEPeriodo(pacienteId, dataInicio, dataFim);
                     res.status(200);
                     return "{\"message\": \"" + imunizacoes.toString() + "\"}";
@@ -119,6 +120,7 @@ public class ImunizacaoService {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
                 }
+                                return res;
             }
         };
     }
@@ -135,6 +137,7 @@ public class ImunizacaoService {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
                 }
+                                return res;
             }
         };
     }
@@ -145,7 +148,7 @@ public class ImunizacaoService {
             public Object handle(Request req, Response res) {
                 try {
                     int id = Integer.parseInt(req.params(":id"));
-                    Imunizacoes imunizacaoDb = ImunizacoesDAO.consultarImunizacaoPorIdImunizacao(id);
+                    DTOImunizacaoDosePaciente imunizacaoDb = ImunizacoesDAO.consultarImunizacaoPorIdImunizacao(id);
 
                     if (imunizacaoDb == null) {
                         res.status(404);
