@@ -48,6 +48,6 @@ O principal objetivo deste projeto é fornecer um meio eficiente para registrar 
 |:---:|:---:|:---:|
 | **[Ana Vitoria](https://github.com/Bella-my)** | **[Fernando Alv](https://github.com/Fernando-Alv)** | **[Zé Fernando](https://github.com/ze-fernando)** |
 
-| [![Rodrigo TP](https://github.com/rodrigo-tp.png?size=100)](https://github.com/rodrigo-tp) | [![Miri12345](https://github.com/miri12345.png?size=100)](https://github.com/miri12345) |  |
+| [![Rodrigo TP](https://github.com/rodrigo-tp.png?size=100)](https://github.com/rodrigo-tp) | [![Miri12345](https://github.com/miri12345.png?size=100)](https://github.com/miri12345) |  [![Douglasffjw](https://github.com/Douglasffjw.png?size=100)](https://github.com/Douglasffjw) | 
 |:---:|:---:|:---:|
-| **[Rodrigo TP](https://github.com/rodrigo-tp)** | **[Miri12345](https://github.com/miri12345)** |  |
+| **[Rodrigo TP](https://github.com/rodrigo-tp)** | **[Miri12345](https://github.com/miri12345)** | **[Douglasffjw](https://github.com/Douglasffjw)** |
