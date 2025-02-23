@@ -9,7 +9,6 @@ import com.mesttra.vacinas.dao.VacinaDAO;
 import com.mesttra.vacinas.dto.DTOVacinaDose;
 import com.mesttra.vacinas.models.enums.PublicoAlvo;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class VacinaService {
@@ -26,7 +25,7 @@ public class VacinaService {
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}" ;
-                };
+                }
             }
         };
     }
@@ -43,7 +42,7 @@ public class VacinaService {
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}" ;
-                };
+                }
             }
         };
     }
@@ -60,7 +59,7 @@ public class VacinaService {
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}" ;
-                };
+                }
             }
         };
     }
@@ -77,7 +76,7 @@ public class VacinaService {
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}" ;
-                };
+                }
             }
         };
     }

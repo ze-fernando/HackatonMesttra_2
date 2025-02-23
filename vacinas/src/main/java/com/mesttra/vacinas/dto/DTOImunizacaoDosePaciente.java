@@ -25,7 +25,47 @@ public class DTOImunizacaoDosePaciente {
 		this.lote = lote;
 		this.local_aplicacao = local_aplicacao;
 		this.profissional_aplicador = profissional_aplicador;
-	}	
+	}
+
+ public void setPacienteId(String queryParams) {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'setPacienteId'");
+ }
+
+ public void setVacinaId(String queryParams) {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'setVacinaId'");
+ }
+
+ public void setDataAplicacao(String queryParams) {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'setDataAplicacao'");
+ }
+
+ public java.util.Date getData_aplicacao() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getData_aplicacao'");
+ }
+
+ public String getFabricante() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getFabricante'");
+ }
+
+ public String getLote() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getLote'");
+ }
+
+ public String getProfissional_aplicador() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getProfissional_aplicador'");
+ }
+
+ public int getId() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getId'");
+ }	
     
     
 }

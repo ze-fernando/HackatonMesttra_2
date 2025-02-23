@@ -9,6 +9,7 @@ import com.mesttra.vacinas.models.Paciente;
 import com.mesttra.vacinas.dao.PacienteDAO;
 import com.mesttra.vacinas.dao.EstatisticaDAO;
 
+@SuppressWarnings("unused")
 public class EstatisticasService {
 
     public static Route readQtdeVacinasByPaciente(){
@@ -80,7 +81,7 @@ public class EstatisticasService {
 
                 try {
                     int qtdVacinasAcimaIdade = EstatisticaDAO
-                    .consultarVacinasAcimaDeIdade(idPaciente, month);
+                    .consultarVacinasAcimaDeIdade(idPaciente);
 
                     res.status(200);
                     return "{\"message\": \"Vacinas " + qtdVacinasAcimaIdade + ".\"}" ;
