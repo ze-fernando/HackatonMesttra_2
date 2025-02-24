@@ -14,7 +14,7 @@ import com.mesttra.vacinas.models.Paciente.Sexo;
 
 public class PacienteDAO {
 	public static void adicionarPaciente(Paciente paciente) throws SQLException{
-        String sql = "INSERT INTO paciente (nome, cpf, sexo, data_nascimento,) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO paciente (nome, cpf, sexo, data_nascimento) VALUES (?, ?, ?, ?)";
         
         try (Connection conexao = ConexaoBanco.getConnection();
              PreparedStatement comando = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
