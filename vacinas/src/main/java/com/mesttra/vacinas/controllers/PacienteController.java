@@ -14,13 +14,12 @@ public class PacienteController {
         get("/paciente/consultar/:id", PacienteService.readPacienteById());
 
         // Consultar todos os pacientes
-        get("/paciente/consultar", PacienteService.readPaciente());
+        get("/pacientes", PacienteService.readPaciente());
 
         // Alterar um paciente 
         put("/paciente/alterar/:id", PacienteService.updatePaciente());
 
         // Excluir um paciente 
         delete("/paciente/excluir/:id", PacienteService.deletePaciente());
-
-    }    
+    }   
 }
