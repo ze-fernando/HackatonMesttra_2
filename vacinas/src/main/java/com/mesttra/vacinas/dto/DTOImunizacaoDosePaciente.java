@@ -27,6 +27,11 @@ public class DTOImunizacaoDosePaciente {
 		this.profissional_aplicador = profissional_aplicador;
 	}
 
+ public DTOImunizacaoDosePaciente(int id2, int pacienteId, int doseId, Date dataAplicacao, String fabricante2,
+   String lote2, String localAplicacao, String profissionalAplicador) {
+  //TODO Auto-generated constructor stub
+ }
+
  public void setPacienteId(String queryParams) {
   // TODO Auto-generated method stub
   throw new UnsupportedOperationException("Unimplemented method 'setPacienteId'");
@@ -42,7 +47,7 @@ public class DTOImunizacaoDosePaciente {
   throw new UnsupportedOperationException("Unimplemented method 'setDataAplicacao'");
  }
 
- public java.util.Date getData_aplicacao() {
+ public String getData_aplicacao() {
   // TODO Auto-generated method stub
   throw new UnsupportedOperationException("Unimplemented method 'getData_aplicacao'");
  }
@@ -65,6 +70,11 @@ public class DTOImunizacaoDosePaciente {
  public int getId() {
   // TODO Auto-generated method stub
   throw new UnsupportedOperationException("Unimplemented method 'getId'");
+ }
+
+ public int getIdPaciente() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getIdPaciente'");
  }	
     
     

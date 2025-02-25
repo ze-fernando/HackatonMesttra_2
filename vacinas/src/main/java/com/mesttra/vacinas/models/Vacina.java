@@ -18,6 +18,10 @@ public class Vacina {
         this.publico_alvo = publico_alvo;
     }
 
+    public Vacina(int int1, String string, String string2, String string3) {
+     
+    }
+
     public int getId() {
         return id;
     }

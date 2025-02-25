@@ -21,7 +21,7 @@ public class DTOVacinaDose {
 		this.publico_alvo = publico_alvo;
 	}
 
-	public DTOVacinaDose(int id, String vacina, String dose, int limite_aplicacao) {
+	public DTOVacinaDose(int id, String vacina, String dose, String string, int limite_aplicacao) {
 		
 		this.id = id;
 		this.vacina = vacina;

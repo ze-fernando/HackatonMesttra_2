@@ -1,5 +1,7 @@
 package com.mesttra.vacinas.services;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mesttra.vacinas.dao.ImunizacoesDAO;
 import com.mesttra.vacinas.dto.DTOImunizacaoDosePaciente;
 import com.mesttra.vacinas.models.Imunizacoes;
@@ -7,24 +9,46 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ImunizacaoService {
+
+     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static Route createImunizacao() {
         return new Route() {
             @Override
             public Object handle(Request req, Response res) {
                 try {
+                    String pacienteIdParam = req.queryParams("id_paciente");
+                    String doseIdParam = req.queryParams("id_dose");
+                    String dataAplicacaoParam = req.queryParams("data_aplicacao");
+                    String fabricante = req.queryParams("fabricante");
+                    String lote = req.queryParams("lote");
+                    String localAplicacao = req.queryParams("local_aplicacao");
+                    String profissionalAplicador = req.queryParams("profissional_aplicador");
+
+                    if (pacienteIdParam == null || doseIdParam == null || dataAplicacaoParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"Os campos id_paciente, id_dose e data_aplicacao são obrigatórios.\"}";
+                    }
+
+                    int pacienteId = Integer.parseInt(pacienteIdParam);
+                    int doseId = Integer.parseInt(doseIdParam);
+                    Date dataAplicacao = Date.valueOf(dataAplicacaoParam);
+
                     Imunizacoes newImunizacao = new Imunizacoes(
-                            0, 0, 0, null, req.queryParams("paciente_id"),
-                                                        req.queryParams("vacina_id"),
-                                                        req.queryParams("data_aplicacao"), null);
+                            0, pacienteId, doseId, dataAplicacao, fabricante, lote, localAplicacao, profissionalAplicador);
 
                     ImunizacoesDAO.adicionarImunizacao(newImunizacao);
                     res.status(201);
-                    return "{\"message\": \" Imunização criada com sucesso \"}";
-                } catch (Exception e) {
+                    return "{\"message\": \"Imunização criada com sucesso.\"}";
+                } catch (NumberFormatException e) {
+                    res.status(400);
+                    return "{\"error\": \"ID do paciente ou ID da dose inválido.\"}";
+                } catch (SQLException e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
                 }
@@ -39,7 +63,7 @@ public class ImunizacaoService {
                 try {
                     List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO.consultarTodasImunizacoes();
                     res.status(200);
-                    return "{\"message\": \"" + imunizacoes.toString() + "\"}";
+                    return gson.toJson(imunizacoes);
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
@@ -48,20 +72,31 @@ public class ImunizacaoService {
         };
     }
 
-    public static Route readImunizacaoById() {
+    public static Route readImunizacaoByDoseId() {
         return new Route() {
             @Override
             public Object handle(Request req, Response res) {
                 try {
-                    int id = Integer.parseInt(req.params(":id"));
-                    DTOImunizacaoDosePaciente imunizacao = ImunizacoesDAO.consultarImunizacaoPorIdImunizacao(id);
+                    String doseIdParam = req.queryParams("id_dose");
+
+                    if (doseIdParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"ID da dose é obrigatório.\"}";
+                    }
+
+                    int doseId = Integer.parseInt(doseIdParam);
+                    DTOImunizacaoDosePaciente imunizacao = ImunizacoesDAO.consultarImunizacaoPorIdDose(doseId);
 
                     if (imunizacao == null) {
                         res.status(404);
-                        return "{\"message\": \" Imunização não encontrada \"}";
+                        return "{\"message\": \"Imunização não encontrada.\"}";
                     }
+
                     res.status(200);
-                    return "{\"message\": \"" + imunizacao.toString() + "\"}";
+                    return gson.toJson(imunizacao);
+                } catch (NumberFormatException e) {
+                    res.status(400);
+                    return "{\"error\": \"ID da dose inválido.\"}";
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
@@ -75,10 +110,26 @@ public class ImunizacaoService {
             @Override
             public Object handle(Request req, Response res) {
                 try {
-                    int pacienteId = Integer.parseInt(req.params(":id"));
+                    String pacienteIdParam = req.params(":id");
+
+                    if (pacienteIdParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"ID do paciente é obrigatório.\"}";
+                    }
+
+                    int pacienteId = Integer.parseInt(pacienteIdParam);
                     List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO.consultarImunizacoesPorIdPaciente(pacienteId);
+
+                    if (imunizacoes.isEmpty()) {
+                        res.status(404);
+                        return "{\"message\": \"Imunizações não encontradas.\"}";
+                    }
+
                     res.status(200);
-                    return "{\"message\": \"" + imunizacoes.toString() + "\"}";
+                    return gson.toJson(imunizacoes);
+                } catch (NumberFormatException e) {
+                    res.status(400);
+                    return "{\"error\": \"ID do paciente inválido.\"}";
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
@@ -92,14 +143,31 @@ public class ImunizacaoService {
             @Override
             public Object handle(Request req, Response res) {
                 try {
-                    int pacienteId = Integer.parseInt(req.params(":id"));
-                    String dataInicio = req.queryParams("data_inicio");
-                    String dataFim = req.queryParams("data_fim");
+                    String pacienteIdParam = req.params(":id");
+                    String dataInicioParam = req.params(":dt_ini");
+                    String dataFimParam = req.params(":dt_fim");
 
-                    List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO
-                            .consultarImunizacoesPorIdPacienteEPeriodo(pacienteId, dataInicio, dataFim);
+                    if (pacienteIdParam == null || dataInicioParam == null || dataFimParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"ID do paciente, data de início e data de fim são obrigatórios.\"}";
+                    }
+
+                    int pacienteId = Integer.parseInt(pacienteIdParam);
+                    java.sql.Date dataInicio = java.sql.Date.valueOf(dataInicioParam);
+                    java.sql.Date dataFim = java.sql.Date.valueOf(dataFimParam);
+
+                    List<DTOImunizacaoDosePaciente> imunizacoes = ImunizacoesDAO.consultarImunizacoesPorIdPacienteEPeriodo(pacienteId, dataInicio, dataFim);
+
+                    if (imunizacoes.isEmpty()) {
+                        res.status(404);
+                        return "{\"message\": \"Imunizações não encontradas.\"}";
+                    }
+
                     res.status(200);
-                    return "{\"message\": \"" + imunizacoes.toString() + "\"}";
+                    return gson.toJson(imunizacoes);
+                } catch (NumberFormatException e) {
+                    res.status(400);
+                    return "{\"error\": \"ID do paciente ou datas inválidas.\"}";
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
@@ -108,19 +176,29 @@ public class ImunizacaoService {
         };
     }
 
-    public static Route deleteImunizacaoById() {
+    public static Route deleteImunizacaoByDoseId() {
         return new Route() {
             @Override
             public Object handle(Request req, Response res) {
                 try {
-                    int id = Integer.parseInt(req.params(":id"));
-                    ImunizacoesDAO.excluirImunizacao(id);
-                    res.status(204);
+                    String doseIdParam = req.params(":id_dose");
+
+                    if (doseIdParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"ID da dose é obrigatório.\"}";
+                    }
+
+                    int doseId = Integer.parseInt(doseIdParam);
+                    ImunizacoesDAO.excluirImunizacaoPorDoseId(doseId);
+                    res.status(200);
+                    return "{\"message\": \"Imunização excluída com sucesso.\"}";
+                } catch (NumberFormatException e) {
+                    res.status(400);
+                    return "{\"error\": \"ID da dose inválido.\"}";
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
                 }
-                                return res;
             }
         };
     }
@@ -147,21 +225,34 @@ public class ImunizacaoService {
             @Override
             public Object handle(Request req, Response res) {
                 try {
-                    int id = Integer.parseInt(req.params(":id"));
-                    DTOImunizacaoDosePaciente imunizacaoDb = ImunizacoesDAO.consultarImunizacaoPorIdImunizacao(id);
+                    String idParam = req.params(":id");
+                    String pacienteIdParam = req.queryParams("id_paciente");
+                    String doseIdParam = req.queryParams("id_dose");
+                    String dataAplicacaoParam = req.queryParams("data_aplicacao");
+                    String fabricante = req.queryParams("fabricante");
+                    String lote = req.queryParams("lote");
+                    String localAplicacao = req.queryParams("local_aplicacao");
+                    String profissionalAplicador = req.queryParams("profissional_aplicador");
 
-                    if (imunizacaoDb == null) {
-                        res.status(404);
-                        return "Imunização não encontrada.";
+                    if (idParam == null || pacienteIdParam == null || doseIdParam == null || dataAplicacaoParam == null) {
+                        res.status(400);
+                        return "{\"error\": \"Os campos id, id_paciente, id_dose e data_aplicacao são obrigatórios.\"}";
                     }
 
-                    imunizacaoDb.setPacienteId(req.queryParams("paciente_id"));
-                    imunizacaoDb.setVacinaId(req.queryParams("vacina_id"));
-                    imunizacaoDb.setDataAplicacao(req.queryParams("data_aplicacao"));
+                    int id = Integer.parseInt(idParam);
+                    int pacienteId = Integer.parseInt(pacienteIdParam);
+                    int doseId = Integer.parseInt(doseIdParam);
+                    java.sql.Date dataAplicacao = java.sql.Date.valueOf(dataAplicacaoParam);
 
-                    ImunizacoesDAO.alterarImunizacao(imunizacaoDb);
+                    DTOImunizacaoDosePaciente imunizacao = new  DTOImunizacaoDosePaciente(
+                            id, pacienteId, doseId, dataAplicacao, fabricante, lote, localAplicacao, profissionalAplicador);
+
+                    ImunizacoesDAO.alterarImunizacao(imunizacao);
                     res.status(200);
-                    return "{\"message\": \" Imunização atualizada com sucesso \"}";
+                    return "{\"message\": \"Imunização atualizada com sucesso.\"}";
+                } catch (NumberFormatException e) {
+                    res.status(400);
+                    return "{\"error\": \"ID inválido.\"}";
                 } catch (Exception e) {
                     res.status(500);
                     return "{\"error\": \"" + e.getMessage() + "\"}";
